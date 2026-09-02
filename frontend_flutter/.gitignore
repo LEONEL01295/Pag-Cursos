@@ -1,0 +1,12 @@
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+*.apk
+*.ipa
+*.app
+*.exe
+*.zip
+dist/
+.packages
+.DS_Store
