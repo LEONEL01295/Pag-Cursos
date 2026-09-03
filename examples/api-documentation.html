@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - CourseHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            height: fit-content;
+            position: sticky;
+            top: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-item {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sidebar-item:hover {
+            background: #f5f5f5;
+            border-left-color: #667eea;
+        }
+
+        .sidebar-item.active {
+            background: #f5f5f5;
+            border-left-color: #667eea;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Content */
+        .content {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .endpoint {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .endpoint:last-child {
+            border-bottom: none;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .method {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            width: 80px;
+            text-align: center;
+        }
+
+        .get {
+            background: #4caf50;
+        }
+
+        .post {
+            background: #2196f3;
+        }
+
+        .put {
+            background: #ff9800;
+        }
+
+        .delete {
+            background: #f44336;
+        }
+
+        .path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            background: #f5f5f5;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .description {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .parameter-type {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+
+        .required {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .test-button {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .test-button:hover {
+            background: #764ba2;
+        }
+
+        .response {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .status-200 {
+            color: #4caf50;
+        }
+
+        .status-400 {
+            color: #ff9800;
+        }
+
+        .status-401 {
+            color: #f44336;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .method {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📚 CourseHub API Documentation</h1>
+        <p>Documentación completa de los endpoints disponibles</p>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>Endpoints</h3>
+            <div class="sidebar-item active" onclick="scrollToSection('users')">👥 Users</div>
+            <div class="sidebar-item" onclick="scrollToSection('courses')">📖 Courses</div>
+            <div class="sidebar-item" onclick="scrollToSection('auth')">🔐 Auth</div>
+            <div class="sidebar-item" onclick="scrollToSection('reports')">📊 Reports</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Users Section -->
+            <div id="users">
+                <h2>👥 Users</h2>
+
+                <!-- GET /api/users -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="path">/api/users</div>
+                    </div>
+                    <p class="description">Obtiene la lista de todos los usuarios</p>
+
+                    <div class="section">
+                        <h4>Respuesta (200)</h4>
+                        <div class="code-block">{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Juan Pérez",
+      "email": "juan@example.com",
+      "role": "student"
+    }
+  ]
+}</div>
+                    </div>
+                </div>
+
+                <!-- POST /api/users -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="path">/api/users</div>
+                    </div>
+                    <p class="description">Crea un nuevo usuario</p>
+
+                    <div class="section">
+                        <h4>Body <span class="required">*</span></h4>
+                        <table>
+                            <tr>
+                                <th>Campo</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                            </tr>
+                            <tr>
+                                <td>name</td>
+                                <td><span class="parameter-type">string</span></td>
+                                <td>Nombre del usuario</td>
+                            </tr>
+                            <tr>
+                                <td>email</td>
+                                <td><span class="parameter-type">string</span></td>
+                                <td>Email único</td>
+                            </tr>
+                            <tr>
+                                <td>password</td>
+                                <td><span class="parameter-type">string</span></td>
+                                <td>Contraseña (mínimo 8 caracteres)</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="section">
+                        <h4>Ejemplo de Request</h4>
+                        <div class="code-block">{
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "password": "SecurePass123"
+}</div>
+                    </div>
+
+                    <button class="test-button">Probar Endpoint</button>
+                </div>
+
+                <!-- PUT /api/users/:id -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <div class="path">/api/users/:id</div>
+                    </div>
+                    <p class="description">Actualiza un usuario existente</p>
+
+                    <div class="section">
+                        <h4>Parámetros</h4>
+                        <table>
+                            <tr>
+                                <th>Parámetro</th>
+                                <th>Descripción</th>
+                            </tr>
+                            <tr>
+                                <td>id <span class="required">*</span></td>
+                                <td>ID del usuario a actualizar</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- DELETE /api/users/:id -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <div class="path">/api/users/:id</div>
+                    </div>
+                    <p class="description">Elimina un usuario</p>
+
+                    <div class="section">
+                        <h4>Respuesta (200)</h4>
+                        <div class="code-block">{
+  "success": true,
+  "message": "Usuario eliminado correctamente"
+}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Section -->
+            <div id="courses">
+                <h2>📖 Courses</h2>
+
+                <!-- GET /api/courses -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="path">/api/courses</div>
+                    </div>
+                    <p class="description">Obtiene la lista de todos los cursos</p>
+
+                    <div class="section">
+                        <h4>Query Parameters</h4>
+                        <table>
+                            <tr>
+                                <th>Parámetro</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                            </tr>
+                            <tr>
+                                <td>category</td>
+                                <td><span class="parameter-type">string</span></td>
+                                <td>Filtrar por categoría</td>
+                            </tr>
+                            <tr>
+                                <td>level</td>
+                                <td><span class="parameter-type">string</span></td>
+                                <td>Filtrar por nivel (beginner, intermediate, advanced)</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- POST /api/courses -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="path">/api/courses</div>
+                    </div>
+                    <p class="description">Crea un nuevo curso (Solo admin)</p>
+
+                    <button class="test-button">Probar Endpoint</button>
+                </div>
+            </div>
+
+            <!-- Auth Section -->
+            <div id="auth">
+                <h2>🔐 Authentication</h2>
+
+                <!-- POST /api/auth/login -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <div class="path">/api/auth/login</div>
+                    </div>
+                    <p class="description">Autentica un usuario y retorna JWT token</p>
+
+                    <div class="section">
+                        <h4>Body <span class="required">*</span></h4>
+                        <div class="code-block">{
+  "email": "usuario@example.com",
+  "password": "password123"
+}</div>
+                    </div>
+
+                    <div class="section">
+                        <h4>Respuesta (200)</h4>
+                        <div class="code-block">{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "user": {
+    "id": 1,
+    "name": "Juan Pérez",
+    "role": "student"
+  }
+}</div>
+                    </div>
+
+                    <button class="test-button">Probar Login</button>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports">
+                <h2>📊 Reports</h2>
+
+                <!-- GET /api/reports/dashboard -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <div class="path">/api/reports/dashboard</div>
+                    </div>
+                    <p class="description">Obtiene estadísticas del dashboard</p>
+
+                    <div class="section">
+                        <h4>Respuesta (200)</h4>
+                        <div class="code-block">{
+  "totalUsers": 1234,
+  "totalCourses": 45,
+  "totalEnrollments": 3890,
+  "completionRate": 78
+}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            element.scrollIntoView({ behavior: 'smooth' });
+            
+            // Update active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Test button handlers
+        document.querySelectorAll('.test-button').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('En una aplicación real, esto abriría un cliente HTTP interactivo para probar el endpoint.');
+            });
+        });
+    </script>
+</body>
+</html>
